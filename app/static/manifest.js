@@ -6,3 +6,29 @@ if(filePicker){
  document.querySelector('#import-csv').addEventListener('click',async event=>{event.target.disabled=true;try{const response=await fetch('/api/runs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({csv_text:editor.value})});const data=await response.json();if(!response.ok)throw Error(data.detail);location.href=location.pathname+'?run_id='+data.manifest.run_id;}catch(e){editor.setCustomValidity(e.message);editor.reportValidity();}finally{event.target.disabled=false;}});
  editor.addEventListener('input',()=>editor.setCustomValidity(''));
 }
+const withdrawBtn=document.querySelector('#withdraw-btn');
+if(withdrawBtn){
+ const runId=document.body.dataset.runId;
+ const msg=document.querySelector('#withdraw-message');
+ const instructionRef='WDL-BATCH-001';
+ const post=async url=>{
+  msg.textContent='裁决中…';
+  const resp=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({instruction_ref:instructionRef})});
+  const data=await resp.json();
+  if(!resp.ok)throw Error(data.detail);
+  return data;
+ };
+ withdrawBtn.addEventListener('click',async()=>{
+  try{
+   const data=await post('/api/withdrawal/'+runId);
+   msg.textContent='已形成证明，尝试 '+data.attempts+' 次（同一指令只保留一套结果）';
+  }catch(e){msg.textContent=e.message;}
+ });
+ const retryBtn=document.querySelector('#retry-btn');
+ retryBtn.addEventListener('click',async()=>{
+  try{
+   const data=await post('/api/withdrawal/'+runId+'/'+instructionRef+'/retry');
+   msg.textContent=(data.idempotent?'幂等：封印一致，':'')+'未新增第二套结果，尝试 '+data.attempts+' 次';
+  }catch(e){msg.textContent=e.message;}
+ });
+}

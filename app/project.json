@@ -10,7 +10,8 @@
     "危险品检查",
     "净毛重核验",
     "报关对账",
-    "版本封存"
+    "版本封存",
+    "撤关证明"
   ],
   "rule": "主提单与分提单拆并形成有向无环关系，件数和净毛重逐层守恒",
   "lane": "L3",
@@ -29,7 +30,8 @@
     "hazard",
     "weight",
     "reconcile",
-    "archive"
+    "archive",
+    "withdrawal"
   ],
   "labels": {
     "id": "提单编号",
@@ -63,6 +65,22 @@
     "graph_errors": "关系错误",
     "weight_errors": "重量差异",
     "child": "子单号",
-    "classes": "危险类组合"
+    "classes": "危险类组合",
+    "instruction_ref": "撤关指令",
+    "master_id": "主单号",
+    "release_ref": "原放行号",
+    "snapshot_seal": "快照封印",
+    "certificate_seal": "证明封印",
+    "mode": "恢复方式",
+    "status": "裁决状态",
+    "released_snapshot": "原放行快照",
+    "effective_balance": "当前有效余额",
+    "restored": "恢复余额",
+    "retained_balance": "保留余额",
+    "evidence_refs": "来源证据",
+    "reason_codes": "裁决依据",
+    "expect": "预期裁决",
+    "attempts": "尝试次数",
+    "created_at": "形成时间"
   }
 }
